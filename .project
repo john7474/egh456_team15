@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>empty_min_EK_TM4C1294XL_TI</name>
+	<name>egh456_team15</name>
 	<comment></comment>
 	<projects>
 	</projects>
@@ -29,18 +29,27 @@
 		<link>
 			<name>drivers/Kentec320x240x16_ssd2119_spi.c</name>
 			<type>1</type>
-			<locationURI>PARENT-5-PROJECT_LOC/ti/tivaware_c_series_2_1_4_178/examples/boards/ek-tm4c1294xl-boostxl-kentec-s1/drivers/Kentec320x240x16_ssd2119_spi.c</locationURI>
+			<locationURI>SW_ROOT/examples/boards/ek-tm4c1294xl-boostxl-kentec-s1/drivers/Kentec320x240x16_ssd2119_spi.c</locationURI>
+		</link>
+		<link>
+			<name>drivers/pinout.c</name>
+			<type>1</type>
+			<locationURI>SW_ROOT/examples/boards/ek-tm4c1294xl-boostxl-kentec-s1/drivers/pinout.c</locationURI>
 		</link>
 		<link>
 			<name>drivers/touch.c</name>
 			<type>1</type>
-			<locationURI>PARENT-5-PROJECT_LOC/ti/tivaware_c_series_2_1_4_178/examples/boards/ek-tm4c1294xl-boostxl-kentec-s1/drivers/touch.c</locationURI>
+			<locationURI>SW_ROOT/examples/boards/ek-tm4c1294xl-boostxl-kentec-s1/drivers/touch.c</locationURI>
 		</link>
 	</linkedResources>
 	<variableList>
 		<variable>
 			<name>SW_ROOT</name>
-			<value>file:/C:/ti/tivaware_c_series_2_1_4_178</value>
+			<value>$%7BTI_PRODUCTS_DIR%7D/tivaware_c_series_2_1_4_178</value>
+		</variable>
+		<variable>
+			<name>copy_PARENT</name>
+			<value>$%7BPARENT-1-TI_PRODUCTS_DIR%7D</value>
 		</variable>
 	</variableList>
 </projectDescription>
