@@ -67,7 +67,7 @@ void OnNext(tWidget *psWidget);
 void OnPrevious(tWidget *psWidget);
 void DrawPlots();
 void drawSpeedPoint();
-void drawCurrentPoint();
+void drawPowerPoint();
 void StartStopBttnPress(tWidget *psWidget);
 void heartBeatFxn(UArg arg0, UArg arg1);
 void UARTFxn(UART_Handle handle, void *rxBuf, size_t size);
@@ -86,8 +86,8 @@ int prevMotorSpeed = 0;
 int plotLeft = 0;
 uint8_t motorOn = 0;
 
-int motorCurrent = 0;
-int prevMotorCurrent = 0;
+int motorPower = 0;
+int prevMotorPower = 0;
 
 tCanvasWidget     g_sBackground;
 tPushButtonWidget g_sStartStopBttn;
@@ -157,7 +157,7 @@ void DrawPlots() {
     GrRectDraw(&sContext, &sRect);
 
     GrContextFontSet(&sContext, &g_sFontCm20);
-    GrStringDrawCentered(&sContext, "Current", -1,
+    GrStringDrawCentered(&sContext, "Power", -1,
                          GrContextDpyWidthGet(&sContext) / 2, 29, 0);
     GrStringDrawCentered(&sContext, "Speed", -1,
                          GrContextDpyWidthGet(&sContext) / 2, 111, 0);
@@ -169,10 +169,10 @@ void drawSpeedPoint(){
                          GrContextDpyWidthGet(&sContext) / 2, 111, 0);
 }
 
-void drawCurrentPoint(){
-    GrLineDraw(&sContext, plotLeft,103 - (motorCurrent/65),plotLeft + 5 ,103 - (motorCurrent/65));
-    GrStringDrawCentered(&sContext, "Speed", -1,
-                         GrContextDpyWidthGet(&sContext) / 2, 111, 0);
+void drawPowerPoint(){
+    GrLineDraw(&sContext, plotLeft,103 - (motorPower/65),plotLeft + 5 ,103 - (motorPower/65));
+    GrStringDrawCentered(&sContext, "Power", -1,
+                         GrContextDpyWidthGet(&sContext) / 2, 29, 0);
 }
 
 void StartStopBttnPress(tWidget *psWidget)
@@ -207,11 +207,11 @@ void heartBeatFxn(UArg arg0, UArg arg1)
 {
     while (1) {
 
-        if((prevMotorSpeed != motorSpeed) || (prevMotorCurrent != motorCurrent)){
+        if((prevMotorSpeed != motorSpeed) || (prevMotorPower != motorPower)){
             drawSpeedPoint();
             prevMotorSpeed = motorSpeed;
-            prevMotorCurrent = motorCurrent;
-            drawCurrentPoint();
+            prevMotorPower = motorPower;
+            drawPowerPoint();
             plotLeft =  plotLeft + 5;
 
         }
@@ -288,12 +288,12 @@ void SwiDown(UArg arg0, UArg arg1){
 }
 
 void SwiRight(UArg arg0, UArg arg1){
-     motorCurrent = motorCurrent  + 100;
+     motorPower = motorPower  + 100;
 }
 
 void SwiLeft(UArg arg0, UArg arg1){
-    if(motorCurrent >= 100){
-        motorCurrent = motorCurrent  - 100;
+    if(motorPower >= 100){
+        motorPower = motorPower  - 100;
     }
 }
 
