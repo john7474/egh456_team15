@@ -6,6 +6,7 @@
 #include <xdc/std.h>
 #include <xdc/runtime/System.h>
 #include <xdc/runtime/Types.h>
+#include <xdc/runtime/Error.h>
 
 /* BIOS Header files */
 #include <ti/sysbios/BIOS.h>
@@ -55,6 +56,9 @@
 
 /* Board Header file */
 #include <Board.h>
+
+/* Motor Library */
+#include <motorlib.h>
 
 #define TASKSTACKSIZE   1024
 
@@ -366,6 +370,9 @@ void initUART(){
 }
 
 int main(void){
+    Error_Block eb;
+    Error_init(&eb);
+
     /* Call board init functions */
     Board_initGeneral();
     Board_initGPIO();
@@ -379,8 +386,7 @@ int main(void){
     taskParams.stack = &task0Stack;
     Task_construct(&task0Struct, (Task_FuncPtr)heartBeatFxn, &taskParams, NULL);
 
-    //Create the Swi thread
-    //Can use construct or create
+    //Create the Swi threads
     Swi_Params_init(&swiParams);
     SwiDownHandle = Swi_create(SwiDown,&swiParams,NULL);
 
@@ -408,6 +414,11 @@ int main(void){
 
     initUART();
     initScreen();
+    bool motorStatus = initMotorLib(50, &eb);
+
+    if (!motorStatus) {
+        System_abort(eb.msg);
+    }
 
     /* Start BIOS */
     BIOS_start();

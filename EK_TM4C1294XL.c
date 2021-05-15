@@ -409,7 +409,7 @@ void EK_TM4C1294XL_initI2C(void)
  */
 /* Place into subsections to allow the TI linker to remove items properly */
 #if defined(__TI_COMPILER_VERSION__)
-#pragma DATA_SECTION(PWM_config, ".const:PWM_config")
+//#pragma DATA_SECTION(PWM_config, ".const:PWM_config")
 #pragma DATA_SECTION(pwmTivaHWAttrs, ".const:pwmTivaHWAttrs")
 #endif
 
@@ -426,14 +426,14 @@ const PWMTiva_HWAttrs pwmTivaHWAttrs[EK_TM4C1294XL_PWMCOUNT] = {
     }
 };
 
-const PWM_Config PWM_config[] = {
-    {
-        .fxnTablePtr = &PWMTiva_fxnTable,
-        .object = &pwmTivaObjects[0],
-        .hwAttrs = &pwmTivaHWAttrs[0]
-    },
-    {NULL, NULL, NULL}
-};
+//const PWM_Config PWM_config[] = {
+//    {
+//        .fxnTablePtr = &PWMTiva_fxnTable,
+//        .object = &pwmTivaObjects[0],
+//        .hwAttrs = &pwmTivaHWAttrs[0]
+//    },
+//    {NULL, NULL, NULL}
+//};
 
 /*
  *  ======== EK_TM4C1294XL_initPWM ========
