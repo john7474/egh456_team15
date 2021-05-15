@@ -25,23 +25,6 @@
 		<nature>org.eclipse.cdt.core.ccnature</nature>
 		<nature>org.eclipse.cdt.managedbuilder.core.ScannerConfigNature</nature>
 	</natures>
-	<linkedResources>
-		<link>
-			<name>drivers/Kentec320x240x16_ssd2119_spi.c</name>
-			<type>1</type>
-			<locationURI>SW_ROOT/examples/boards/ek-tm4c1294xl-boostxl-kentec-s1/drivers/Kentec320x240x16_ssd2119_spi.c</locationURI>
-		</link>
-		<link>
-			<name>drivers/pinout.c</name>
-			<type>1</type>
-			<locationURI>SW_ROOT/examples/boards/ek-tm4c1294xl-boostxl-kentec-s1/drivers/pinout.c</locationURI>
-		</link>
-		<link>
-			<name>drivers/touch.c</name>
-			<type>1</type>
-			<locationURI>SW_ROOT/examples/boards/ek-tm4c1294xl-boostxl-kentec-s1/drivers/touch.c</locationURI>
-		</link>
-	</linkedResources>
 	<variableList>
 		<variable>
 			<name>SW_ROOT</name>

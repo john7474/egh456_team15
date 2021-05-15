@@ -16,7 +16,7 @@ BIOS_INC  = -I"/home/manny/ti/tirtos_tivac_2_16_00_08/products/bios_6_45_01_29/p
 
 TARGET_INC = -I"/home/manny/ti/tirtos_tivac_2_16_00_08/products/bios_6_45_01_29/packages/"
 
-INCS = $(BIOS_INC) $(TARGET_INC)  --include_path="/home/manny/ti/tivaware_c_series_2_1_4_178" --include_path="/home/manny/ti/tivaware_c_series_2_1_4_178/examples/boards/ek-tm4c1294xl-boostxl-kentec-s1" --include_path="/home/manny/workspace/qut/egh456_team15" --include_path="/home/manny/workspace/qut/egh456_team15" --include_path="/home/manny/ti/tirtos_tivac_2_16_00_08/products/TivaWare_C_Series-2.1.1.71b" --include_path="/home/manny/ti/tirtos_tivac_2_16_00_08/products/bios_6_45_01_29/packages/ti/sysbios/posix" --include_path="/home/manny/ti/ccs1020/ccs/tools/compiler/ti-cgt-arm_20.2.2.LTS/include" 
+INCS = $(BIOS_INC) $(TARGET_INC)  --include_path="/home/manny/ti/tivaware_c_series_2_1_4_178" --include_path="/home/manny/workspace/qut/egh456_team15" --include_path="/home/manny/workspace/qut/egh456_team15" --include_path="/home/manny/ti/tirtos_tivac_2_16_00_08/products/TivaWare_C_Series-2.1.1.71b" --include_path="/home/manny/ti/tirtos_tivac_2_16_00_08/products/bios_6_45_01_29/packages/ti/sysbios/posix" --include_path="/home/manny/ti/ccs1020/ccs/tools/compiler/ti-cgt-arm_20.2.2.LTS/include" 
 
 CC = /home/manny/ti/ccs1020/ccs/tools/compiler/ti-cgt-arm_20.2.2.LTS/bin/armcl -c $(CCOPTS) -I /home/manny/ti/ccs1020/ccs/tools/compiler/ti-cgt-arm_20.2.2.LTS/include
 ASM = /home/manny/ti/ccs1020/ccs/tools/compiler/ti-cgt-arm_20.2.2.LTS/bin/armcl -c $(CCOPTS) -I /home/manny/ti/ccs1020/ccs/tools/compiler/ti-cgt-arm_20.2.2.LTS/include
