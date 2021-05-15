@@ -119,7 +119,7 @@ Swi_Handle SwiMotorToggle;
 // The canvas widget acting as the background to the display.
 Canvas(g_sBackground, WIDGET_ROOT, 0, &g_sStartStopBttn,
        &g_sKentec320x240x16_SSD2119, 50, 190, 220, 50,
-       CANVAS_STYLE_TEXT | CANVAS_STYLE_TEXT_OPAQUE, 0, 0, ClrSilver,
+       CANVAS_STYLE_TEXT_OPAQUE, 0, 0, ClrSilver,
        &g_sFontCm20, 0, 0, 0);
 
 RectangularButton(g_sStartStopBttn, &g_sBackground, 0, 0,
