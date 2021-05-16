@@ -60,7 +60,7 @@ extern "C" {
 #define Board_BUTTON0               EK_TM4C1294XL_USR_SW1
 #define Board_BUTTON1               EK_TM4C1294XL_USR_SW2
 
-#define Board_I2C0                  EK_TM4C1294XL_I2C0
+#define Board_I2C2                  EK_TM4C1294XL_I2C2
 
 #define Board_PWM0                  EK_TM4C1294XL_PWM0
 #define Board_PWM1                  EK_TM4C1294XL_PWM0

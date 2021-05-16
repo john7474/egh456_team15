@@ -447,7 +447,7 @@ void initI2C()
     i2cParams.bitRate = I2C_400kHz;
     i2cParams.transferMode = I2C_MODE_CALLBACK;
     i2cParams.transferCallbackFxn = i2cFxn;
-    i2c = I2C_open(Board_I2C0, &i2cParams);
+    i2c = I2C_open(Board_I2C2, &i2cParams);
     if (i2c == NULL) {
         System_abort("Error Initializing I2C\n");
     }
