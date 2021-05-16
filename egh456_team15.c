@@ -31,6 +31,7 @@
 #include <stdbool.h>
 #include <string.h>
 #include <time.h>
+#include <math.h>
 #include <inc/hw_ints.h>
 
 
@@ -58,7 +59,10 @@
 #include <Board.h>
 
 /* Motor Library */
-#include <motorlib.h>
+#include <drivers/motorlib.h>
+
+/* Sensor Headers */
+//#include <drivers/opt3001.h>
 
 #define TASKSTACKSIZE   1024
 
@@ -71,6 +75,7 @@ void drawPowerPoint();
 void StartStopBttnPress(tWidget *psWidget);
 void heartBeatFxn(UArg arg0, UArg arg1);
 void UARTFxn(UART_Handle handle, void *rxBuf, size_t size);
+void i2cFxn(I2C_Handle i2c, I2C_Transaction *i2cTransaction, bool status);
 void toggleMotor(UArg arg0, UArg arg1);
 void SwiUp(UArg arg0, UArg arg1);
 void SwiDown(UArg arg0, UArg arg1);
@@ -79,6 +84,7 @@ void SwiLeft(UArg arg0, UArg arg1);
 void SwiEnter(UArg arg0, UArg arg1);
 void initScreen();
 void initUART();
+void initI2C();
 
 /* Global Variables */
 int motorSpeed = 0;
@@ -98,6 +104,9 @@ UART_Params uartParams;
 UART_Handle uart;
 uint32_t wantedRxBytes = 1;
 uint8_t rxBuf[8];        // Receive buffer
+
+I2C_Params i2cParams;
+I2C_Handle i2c;
 
 Task_Struct task0Struct;
 Char task0Stack[TASKSTACKSIZE];
@@ -205,7 +214,21 @@ void StartStopBttnPress(tWidget *psWidget)
 
 void heartBeatFxn(UArg arg0, UArg arg1)
 {
+    uint8_t         txBuffer[4];
+    uint8_t         rxBuffer[2];
+    I2C_Transaction i2cTransaction;
+
+    txBuffer[0] = 0x01;
+    txBuffer[1] = 0xC4;
+    txBuffer[2] = 0x10;
+    i2cTransaction.slaveAddress = OPT3001_I2C_ADDRESS;
+    i2cTransaction.writeBuf = txBuffer;
+    i2cTransaction.writeCount = 3;
+    i2cTransaction.readBuf = rxBuffer;
+    i2cTransaction.readCount = 2;
+
     while (1) {
+        I2C_transfer(i2c, &i2cTransaction);
 
         if((prevMotorSpeed != motorSpeed) || (prevMotorPower != motorPower)){
             drawSpeedPoint();
@@ -230,6 +253,8 @@ void heartBeatFxn(UArg arg0, UArg arg1)
         }
 
         WidgetMessageQueueProcess();
+
+        System_flush();
     }
 }
 
@@ -266,6 +291,49 @@ void UARTFxn(UART_Handle handle, void *rxBuf, size_t size){
     UART_read(uart, rxBuf, wantedRxBytes);
 }
 
+void sensorOpt3001Convert(uint16_t rawData, float *convertedLux)
+{
+    uint16_t e, m;
+
+    m = rawData & 0x0FFF;
+    e = (rawData & 0xF000) >> 12;
+
+    *convertedLux = m * (0.01 * exp2(e));
+}
+
+void i2cFxn(I2C_Handle i2c, I2C_Transaction *i2cTransaction, bool status){
+    uint8_t *rxBuffer = (uint8_t*)i2cTransaction->readBuf;
+    uint8_t *txBuffer = (uint8_t*)i2cTransaction->writeBuf;
+    float convertedLux;
+
+    uint16_t val = (((uint16_t)rxBuffer[0] << 8) & 0xFF00) | ((uint16_t)rxBuffer[1] & 0x00FF);
+
+    if (status) {
+        if (txBuffer[0]) {
+            // Value returned from config register
+        }
+        else {
+//        System_printf("Manufacturer ID Correct: %x\n", (((uint16_t)rxBuffer[1] << 8) & 0xFF00) | ((uint16_t)rxBuffer[0] & 0x00FF));
+
+            sensorOpt3001Convert(val, &convertedLux);
+            System_printf("Lux: %5.2f\n", convertedLux);
+        }
+
+        txBuffer[0] = !txBuffer[0];
+        txBuffer[1] = NULL;
+        txBuffer[2] = NULL;
+    }
+    else {
+        System_printf("I2C Bus fault\n");
+    }
+
+    i2cTransaction->slaveAddress = OPT3001_I2C_ADDRESS;
+    i2cTransaction->writeBuf = txBuffer;
+    i2cTransaction->writeCount = 1;
+    i2cTransaction->readBuf = rxBuffer;
+    i2cTransaction->readCount = 2;
+}
+
 void toggleMotor(UArg arg0, UArg arg1){
 
     if (motorOn){
@@ -275,6 +343,7 @@ void toggleMotor(UArg arg0, UArg arg1){
     }
 
 }
+
 void SwiUp(UArg arg0, UArg arg1){
     if(motorSpeed <= 4900){
         motorSpeed = motorSpeed + 100;
@@ -335,6 +404,7 @@ void initScreen(){
 
     if (TouchScreenIntHandlerHandle == NULL) {
         System_abort("Hwi create failed");
+        System_flush();
     }
 
     TouchScreenInit(cpuFreq.lo);
@@ -361,12 +431,29 @@ void initUART(){
 
     if (uart == NULL) {
         System_abort("Error opening the UART");
+        System_flush();
     }
 
     const char echoPrompt[] = "\fKey Entered:\r\n";
     UART_write(uart, echoPrompt, sizeof(echoPrompt));
 
     UART_read(uart, rxBuf, wantedRxBytes);
+}
+
+void initI2C()
+{
+    /* Create I2C for usage */
+    I2C_Params_init(&i2cParams);
+    i2cParams.bitRate = I2C_400kHz;
+    i2cParams.transferMode = I2C_MODE_CALLBACK;
+    i2cParams.transferCallbackFxn = i2cFxn;
+    i2c = I2C_open(Board_I2C0, &i2cParams);
+    if (i2c == NULL) {
+        System_abort("Error Initializing I2C\n");
+    }
+    else {
+        System_printf("I2C Initialized!\n");
+    }
 }
 
 int main(void){
@@ -377,6 +464,7 @@ int main(void){
     Board_initGeneral();
     Board_initGPIO();
     Board_initUART();
+    Board_initI2C();
     PinoutSet(false, false);
 
     Task_Params taskParams;
@@ -410,9 +498,11 @@ int main(void){
     gateHwi = GateHwi_create(&gHwiprms, NULL);
     if (gateHwi == NULL) {
         System_abort("Gate Hwi create failed");
+        System_flush();
     }
 
     initUART();
+    initI2C();
     initScreen();
     bool motorStatus = initMotorLib(50, &eb);
 

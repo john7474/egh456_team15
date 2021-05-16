@@ -60,11 +60,7 @@ extern "C" {
 #define Board_BUTTON0               EK_TM4C1294XL_USR_SW1
 #define Board_BUTTON1               EK_TM4C1294XL_USR_SW2
 
-#define Board_I2C0                  EK_TM4C1294XL_I2C7
-#define Board_I2C1                  EK_TM4C1294XL_I2C8
-#define Board_I2C_TMP               EK_TM4C1294XL_I2C7
-#define Board_I2C_NFC               EK_TM4C1294XL_I2C7
-#define Board_I2C_TPL0401           EK_TM4C1294XL_I2C7
+#define Board_I2C0                  EK_TM4C1294XL_I2C0
 
 #define Board_PWM0                  EK_TM4C1294XL_PWM0
 #define Board_PWM1                  EK_TM4C1294XL_PWM0
@@ -88,9 +84,7 @@ extern "C" {
 #define Board_WIFI_SPI              EK_TM4C1294XL_SPI2
 
 /* Board specific I2C addresses */
-#define Board_TMP006_ADDR           (0x40)
-#define Board_RF430CL330_ADDR       (0x28)
-#define Board_TPL0401_ADDR          (0x40)
+#define OPT3001_I2C_ADDRESS         (0x47)
 
 #ifdef __cplusplus
 }

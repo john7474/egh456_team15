@@ -345,13 +345,8 @@ I2CTiva_Object i2cTivaObjects[EK_TM4C1294XL_I2CCOUNT];
 
 const I2CTiva_HWAttrs i2cTivaHWAttrs[EK_TM4C1294XL_I2CCOUNT] = {
     {
-        .baseAddr = I2C7_BASE,
-        .intNum = INT_I2C7,
-        .intPriority = (~0)
-    },
-    {
-        .baseAddr = I2C8_BASE,
-        .intNum = INT_I2C8,
+        .baseAddr = I2C0_BASE,
+        .intNum = INT_I2C0,
         .intPriority = (~0)
     }
 };
@@ -359,13 +354,8 @@ const I2CTiva_HWAttrs i2cTivaHWAttrs[EK_TM4C1294XL_I2CCOUNT] = {
 const I2C_Config I2C_config[] = {
     {
         .fxnTablePtr = &I2CTiva_fxnTable,
-        .object = &i2cTivaObjects[0],
-        .hwAttrs = &i2cTivaHWAttrs[0]
-    },
-    {
-        .fxnTablePtr = &I2CTiva_fxnTable,
-        .object = &i2cTivaObjects[1],
-        .hwAttrs = &i2cTivaHWAttrs[1]
+        .object = &i2cTivaObjects[EK_TM4C1294XL_I2C0],
+        .hwAttrs = &i2cTivaHWAttrs[EK_TM4C1294XL_I2C0]
     },
     {NULL, NULL, NULL}
 };
@@ -375,31 +365,16 @@ const I2C_Config I2C_config[] = {
  */
 void EK_TM4C1294XL_initI2C(void)
 {
-    /* I2C7 Init */
-    /*
-     * NOTE: TI-RTOS examples configure pins PD0 & PD1 for SSI2 or I2C7.  Thus,
-     * a conflict occurs when the I2C & SPI drivers are used simultaneously in
-     * an application.  Modify the pin mux settings in this file and resolve the
-     * conflict before running your the application.
-     */
+    /* I2C0 Init */
+
     /* Enable the peripheral */
-    SysCtlPeripheralEnable(SYSCTL_PERIPH_I2C7);
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_I2C0);
 
     /* Configure the appropriate pins to be I2C instead of GPIO. */
-    GPIOPinConfigure(GPIO_PD0_I2C7SCL);
-    GPIOPinConfigure(GPIO_PD1_I2C7SDA);
-    GPIOPinTypeI2CSCL(GPIO_PORTD_BASE, GPIO_PIN_0);
-    GPIOPinTypeI2C(GPIO_PORTD_BASE, GPIO_PIN_1);
-
-    /* I2C8 Init */
-    /* Enable the peripheral */
-    SysCtlPeripheralEnable(SYSCTL_PERIPH_I2C8);
-
-    /* Configure the appropriate pins to be I2C instead of GPIO. */
-    GPIOPinConfigure(GPIO_PA2_I2C8SCL);
-    GPIOPinConfigure(GPIO_PA3_I2C8SDA);
-    GPIOPinTypeI2CSCL(GPIO_PORTA_BASE, GPIO_PIN_2);
-    GPIOPinTypeI2C(GPIO_PORTA_BASE, GPIO_PIN_3);
+    GPIOPinConfigure(GPIO_PB2_I2C0SCL);
+    GPIOPinConfigure(GPIO_PB3_I2C0SDA);
+    GPIOPinTypeI2CSCL(GPIO_PORTB_BASE, GPIO_PIN_2);
+    GPIOPinTypeI2C(GPIO_PORTB_BASE, GPIO_PIN_3);
 
     I2C_init();
 }
